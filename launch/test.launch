@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find assignment_2_2023)/launch/assignment1.launch" />
+    <param></param>
+    <node pkg="rt_assignment_2" type="rt_assignment_2_setTarget" name="setTarget_ac" output="screen"/>
+</launch>
