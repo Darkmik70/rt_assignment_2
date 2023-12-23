@@ -59,7 +59,7 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 add_message_files(
   DIRECTORY msg  
-  FILES robotState.msg target.msg
+  FILES robotState.msg robotTarget.msg robotCancelGoal.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -120,7 +120,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
  INCLUDE_DIRS include
-#  LIBRARIES rt_assignment_2
+ LIBRARIES rt_assignment_2
 #  CATKIN_DEPENDS actionlib actionlib_msgs geometry_msgs roscpp sensor_msgs std_msgs std_srvs
 #  DEPENDS system_lib
 )
@@ -147,7 +147,12 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/rt_assignment_2_node.cpp)
-add_executable(${PROJECT_NAME}_setTarget src/setTarget.cpp)
+add_executable(${PROJECT_NAME}_setTarget
+  src/main.cpp
+  src/set_target_node.cpp
+)
+# add_executable(${PROJECT_NAME}_setTarget src/setTarget_node.cpp)
+
 
 
 ## Rename C++ executable without prefix
@@ -160,6 +165,7 @@ add_executable(${PROJECT_NAME}_setTarget src/setTarget.cpp)
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}_setTarget ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(${PROJECT_NAME}_setTarget ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 
 ## Specify libraries to link a library or executable target against
