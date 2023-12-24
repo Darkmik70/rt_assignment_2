@@ -2,4 +2,5 @@
 <launch>
     <include file="$(find assignment_2_2023)/launch/assignment1.launch" />
     <node pkg="rt_assignment_2" type="rt_assignment_2_setTarget" name="set_target_ac" output="screen"/>
+    <node pkg="rt_assignment_2" type="get_last_target_service_node.py" name="get_last_target_service" output="screen"/>
 </launch>
