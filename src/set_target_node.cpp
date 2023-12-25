@@ -1,6 +1,6 @@
 #include <rt_assignment_2/set_target_node.hpp>
-#include <rt_assignment_2/robotTarget.h>
-#include <rt_assignment_2/robotState.h>
+#include <rt_assignment_2/RobotState.h>
+#include <rt_assignment_2/RobotTarget.h>
 
 #include <ros/ros.h>
 #include <ros/timer.h>
@@ -32,7 +32,7 @@ namespace rt_assignment_2
         sub_cancel_ = nh_->subscribe("/robot_cancel_goal", 10, &SetTargetNode::cancelGoalCallback, this);
 
         // Publishers
-        pub_state_ = nh_->advertise<rt_assignment_2::robotState>("/robot_state", 1000);
+        pub_state_ = nh_->advertise<rt_assignment_2::RobotState>("/robot_state", 1000);
 
         // Timers
         get_actual_pose_timer_ = nh_->createTimer(ros::Duration(0.5), &SetTargetNode::actualPoseCallback, this);
@@ -51,13 +51,13 @@ namespace rt_assignment_2
         }
     }
 
-    void SetTargetNode::cancelGoalCallback(const rt_assignment_2::robotCancelGoal::ConstPtr &msg)
+    void SetTargetNode::cancelGoalCallback(const rt_assignment_2::RobotCancelGoal::ConstPtr &msg)
     {
         ac_->cancelGoal();
         ROS_INFO("Robot's goal is canceled");
     }
 
-    void SetTargetNode::setNewTargetCallback(const rt_assignment_2::robotTarget::ConstPtr &msg)
+    void SetTargetNode::setNewTargetCallback(const rt_assignment_2::RobotTarget::ConstPtr &msg)
     {
         ROS_INFO("New Target arrived");
         // set up new goal
@@ -75,12 +75,13 @@ namespace rt_assignment_2
     void SetTargetNode::robotStateCallback(const nav_msgs::Odometry::ConstPtr &msg)
     {
         // Get msg from /odom and create msg to /robot_state
-        rt_assignment_2::robotState robotState_msg;
+        rt_assignment_2::RobotState robotState_msg;
         robotState_msg.x_pos = msg->pose.pose.position.x;
         robotState_msg.y_pos = msg->pose.pose.position.y;
         robotState_msg.x_vel = msg->twist.twist.linear.x;
         robotState_msg.y_vel = msg->twist.twist.linear.y;
 
+        // Publish new robotStage message
         pub_state_.publish(robotState_msg);
     }
 
