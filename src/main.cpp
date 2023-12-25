@@ -21,7 +21,6 @@ int main(int argc, char **argv)
     }
     catch (const std::exception &e)
     {
-
         std::cerr << e.what() << '\n';
     }
     std::cout << "[" << ros::this_node::getName() << "]"
