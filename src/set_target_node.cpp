@@ -53,8 +53,14 @@ namespace rt_assignment_2
 
     void SetTargetNode::cancelGoalCallback(const rt_assignment_2::RobotCancelGoal::ConstPtr &msg)
     {
-        ac_->cancelGoal();
-        ROS_INFO("Robot's goal is canceled");
+        if (msg->cancelGoal == true)
+        {        
+            ac_->cancelGoal();
+            ROS_INFO("Robot's goal is canceled");
+        }
+        else
+            ROS_INFO("Robot's goal is not canceled, because someone set the value to false");
+
     }
 
     void SetTargetNode::setNewTargetCallback(const rt_assignment_2::RobotTarget::ConstPtr &msg)
