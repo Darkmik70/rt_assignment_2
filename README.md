@@ -141,4 +141,4 @@ actualPoseCallback Function:
 # Further improvements
 --------------------
 In author's opinion these could be additional changes to improve the project:
-- [] Change the rostopic pub messages into rosservices. Current state is a bit clunky and doesnt come in hande to simply cancel the goal or set new target. Use of services would be much more compact here. 
+- [ ] Change the rostopic pub messages into rosservices. Current state is a bit clunky and doesnt come in hande to simply cancel the goal or set new target. Use of services would be much more compact here. 
