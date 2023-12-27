@@ -79,7 +79,7 @@ Project was built using both C++ and Python scripts. In `src/` there are two fil
 
 Main function is used only to initialize the most important components and spin ros node. 
 
-```python
+```
 Main Function:
   Initialize ROS node
   Create ROS node handle
@@ -97,7 +97,7 @@ Main Function:
 
 While most of the logic is hidden inside the constructor of *SetTargetNode* .
 
-```python
+```
 SetTargetNode Class:
   Constructor:
     Store Action Client and Node Handle
@@ -113,7 +113,7 @@ SetTargetNode Class:
 
 The logic based on callbacks to subscribers, publisher, and a timer, to get various information
 
-```python
+```
 actualPoseCallback Function:
     If Action Client state is ACTIVE:
       Log current robot position (feedback_pos_x_, feedback_pos_y_)
