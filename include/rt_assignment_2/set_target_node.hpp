@@ -43,8 +43,6 @@ namespace rt_assignment_2
             const std::shared_ptr<actionlib::SimpleActionClient<assignment_2_2023::PlanningAction>> &ac,
             const std::shared_ptr<ros::NodeHandle> &nh);
 
-        ~SetTargetNode();
-
     private:
 
         /**

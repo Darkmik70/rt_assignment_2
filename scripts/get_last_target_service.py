@@ -16,13 +16,13 @@ class LastTargetServer:
         rospy.loginfo("Service ready to provide the last target coordinates.")
     
     def robot_target_callback(self, data):
-        """ Calback to latest robots position set by user"""
+        """Calback to latest robots position set by user"""
         self.last_target = data
 
     def handle_get_last_target(self, req):
-        """Handles the 'get_last_target' service """
+        """Handles the 'get_last_target' service"""
         response = LastTargetResponse()
-        if self.last_target is not None:
+        if self.last_target:
             response.x = self.last_target.x
             response.y = self.last_target.y
         else:

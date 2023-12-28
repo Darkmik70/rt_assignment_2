@@ -1,2 +1,1 @@
-# Cancel robot's goal
-bool cancelGoal
+# Cancel robot's goal (empty message)
