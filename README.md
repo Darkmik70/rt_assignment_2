@@ -47,16 +47,15 @@ rostopic pub /robot_target rt_assignment_2/RobotTarget "{x: 3.5, y: 3}"
 ```
 
 ### Cancel the goal
-Similarly to the previous example, in order to cancel the goal the user should publish new message onto `/robot_cancel_goal` topic. The type of this message is 
+Similarly to the previous example, in order to cancel the goal the user should publish new message onto `/robot_cancel_goal` topic. The type is `rt_assignment_2/RobotCancelGoal`, but the message is empty.
 
 ```
-rostopic pub /robot_cancel_goal rt_assignment_2/RobotCancelGoal "{cancelGoal: true}"
+rostopic pub /robot_cancel_goal rt_assignment_2/RobotCancelGoal
 ```
-Note: `cancelGoal` value must be set to True to actually cancel the goal.
 
 ### Get the last target (service)
 To get the latest target set by the user, the service `/get_last_target` needs to be called.
-If there was no target yet set. The node should log a warning and return 0 in both x,y coordinates.
+If there was no target yet set. The node will log a warning and return 0 in both x,y coordinates.
 
 ```
 rosservice call /get_last_target 
@@ -142,3 +141,5 @@ actualPoseCallback Function:
 --------------------
 In author's opinion these could be additional changes to improve the project:
 - [ ] Change the rostopic pub messages into rosservices. Current state is a bit clunky and doesnt come in hande to simply cancel the goal or set new target. Use of services would be much more compact here. 
+- [ ] In some cases, it would be better to use standard messages instead of custom ones (eg. /robot_cancel_goal)
+

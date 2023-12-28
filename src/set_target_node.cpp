@@ -32,14 +32,10 @@ namespace rt_assignment_2
         sub_cancel_ = nh_->subscribe("/robot_cancel_goal", 10, &SetTargetNode::cancelGoalCallback, this);
 
         // Publishers
-        pub_state_ = nh_->advertise<rt_assignment_2::RobotState>("/robot_state", 1000);
+        pub_state_ = nh_->advertise<rt_assignment_2::RobotState>("/robot_state", 10);
 
         // Timers
-        get_actual_pose_timer_ = nh_->createTimer(ros::Duration(0.5), &SetTargetNode::actualPoseCallback, this);
-    }
-
-    SetTargetNode::~SetTargetNode()
-    {
+        get_actual_pose_timer_ = nh_->createTimer(ros::Duration(0.5), &SetTargetNode::actualPoseCallback, this);    // 2 Hz
     }
 
 
@@ -53,14 +49,8 @@ namespace rt_assignment_2
 
     void SetTargetNode::cancelGoalCallback(const rt_assignment_2::RobotCancelGoal::ConstPtr &msg)
     {
-        if (msg->cancelGoal == true)
-        {        
-            ac_->cancelGoal();
-            ROS_INFO("Robot's goal is canceled");
-        }
-        else
-            ROS_INFO("Robot's goal is not canceled, because someone set the value to false");
-
+        ac_->cancelGoal();
+        ROS_INFO("Robot's goal has been canceled");
     }
 
     void SetTargetNode::setNewTargetCallback(const rt_assignment_2::RobotTarget::ConstPtr &msg)
@@ -81,14 +71,14 @@ namespace rt_assignment_2
     void SetTargetNode::robotStateCallback(const nav_msgs::Odometry::ConstPtr &msg)
     {
         // Get msg from /odom and create msg to /robot_state
-        rt_assignment_2::RobotState robotState_msg;
-        robotState_msg.x_pos = msg->pose.pose.position.x;
-        robotState_msg.y_pos = msg->pose.pose.position.y;
-        robotState_msg.x_vel = msg->twist.twist.linear.x;
-        robotState_msg.y_vel = msg->twist.twist.linear.y;
+        rt_assignment_2::RobotState robot_state_msg;
+        robot_state_msg.x_pos = msg->pose.pose.position.x;
+        robot_state_msg.y_pos = msg->pose.pose.position.y;
+        robot_state_msg.x_vel = msg->twist.twist.linear.x;
+        robot_state_msg.y_vel = msg->twist.twist.linear.y;
 
         // Publish new robotStage message
-        pub_state_.publish(robotState_msg);
+        pub_state_.publish(robot_state_msg);
     }
 
     void SetTargetNode::doneCallback(const actionlib::SimpleClientGoalState &state,
