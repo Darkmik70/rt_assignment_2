@@ -1,4 +1,23 @@
-#!/usr/bin/env python
+## @package rt_assignment2
+#
+# \file get_target_distance_service.py
+# \brief  ROS service server for handling distance and average speed calculations based on the robot's target.
+# \author Michal Krepa
+# \version 0.1
+# \date 10/04/2024
+#
+# \details
+#
+# Subscribes to: <BR>
+# - /robot_target
+# - /robot_state
+#
+# Publishes to: <BR>
+# [None]
+#
+# Service: <BR>
+# - get_target_distance
+#
 
 import rospy
 from math import hypot
@@ -7,7 +26,10 @@ from rt_assignment_2.msg import RobotState
 from rt_assignment_2.msg import RobotTarget
 from rt_assignment_2.srv import TargetDistance, TargetDistanceResponse
 
-
+##
+# \class DistanceToTargetServer
+# \brief Class defines Rosservice which retrieves the distance in x y z to the target
+#
 class DistanceToTargetServer:
     """
     ROS service server for handling distance and average speed calculations based on the robot's target.

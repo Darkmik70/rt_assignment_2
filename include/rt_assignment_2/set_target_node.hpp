@@ -1,3 +1,10 @@
+/**
+ * @file set_target_node.hpp
+ * @brief Header file defining the SetTargetNode class.
+ *   \author Michal Krepa
+ *   \version 1.0
+ *   \date 10/04/2024
+**/
 #ifndef RT_ASSIGNMENT_2_SET_TARGET_HPP
 #define RT_ASSIGNMENT_2_SET_TARGET_HPP
 

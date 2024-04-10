@@ -1,3 +1,10 @@
+/**
+*   \file set_target_node.cpp
+*   \brief Implementation of SetTargetNode class
+*   \author Michal Krepa
+*   \version 1.0
+*   \date 10/04/2024
+**/
 #include <rt_assignment_2/set_target_node.hpp>
 #include <rt_assignment_2/RobotState.h>
 #include <rt_assignment_2/RobotTarget.h>
@@ -11,7 +18,6 @@
 #include <nav_msgs/Odometry.h>
 
 #include <assignment_2_2023/PlanningAction.h>
-
 
 
 namespace rt_assignment_2
