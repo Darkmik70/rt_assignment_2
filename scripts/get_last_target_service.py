@@ -1,37 +1,40 @@
-## @package rt_assignment2
-#
-# \file get_last_target_service.py
-# \brief ROSservice Server for obtaining the most recent target sent by the user.
-# \author Michal Krepa
-# \version 0.1
-# \date 10/04/2024
-#
-# \details
-#
-# Subscribes to: <BR>
-# /robot_target
-#
-# Publishes to: <BR>
-# [None]
-#
-# Service: <BR>
-# get_last_target
-#
+"""
+ROSservice Server for obtaining the most recent target sent by the user.
 
+This module provides a ROS service server for obtaining the most recent target sent by the user to the robot.
+
+Author: Michal Krepa
+Version: 0.1
+Date: 10/04/2024
+
+Subscribes to:
+- `/robot_target`
+
+Publishes to:
+- [None]
+
+Service:
+- `get_last_target`
+"""
 
 import rospy
 
 from rt_assignment_2.srv import LastTarget, LastTargetResponse
 from rt_assignment_2.msg import RobotTarget
 
-##
-# \class LastTargetServer
-# \brief This class defines a service server for obtaining the last target sent by the user
-#
-#
 class LastTargetServer:
-    """ROS service server for handling the latest target sent by user to the robot"""
+    """
+    ROS service server for handling the latest target sent by user to the robot.
+    """
     def __init__(self, name: str) -> None:
+        """
+        Constructor for LastTargetServer class.
+
+        Initializes a ROS node and sets up subscribers and services.
+
+        Parameters:
+            name (str): The name of the ROS node.
+        """
         rospy.init_node(name)
         self.last_target = None
         rospy.Subscriber("/robot_target", RobotTarget, self.robot_target_callback)
@@ -39,11 +42,24 @@ class LastTargetServer:
         rospy.loginfo("Service ready to provide the last target coordinates.")
     
     def robot_target_callback(self, data):
-        """Calback to latest robots position set by user"""
+        """
+        Callback function for handling the latest robot's target position sent by the user.
+
+        Parameters:
+            data (RobotTarget): The latest robot's target position.
+        """
         self.last_target = data
 
     def handle_get_last_target(self, req):
-        """Handles the 'get_last_target' service"""
+        """
+        Handles the 'get_last_target' service.
+
+        Parameters:
+            req: The service request.
+
+        Returns:
+            LastTargetResponse: The service response containing the last target coordinates.
+        """
         response = LastTargetResponse()
         if self.last_target:
             response.x = self.last_target.x
@@ -53,6 +69,9 @@ class LastTargetServer:
         return response
     
 def main():
+    """
+    Main function to start the ROS node and spin the LastTargetServer.
+    """
     last_target_server_node = LastTargetServer('get_last_target')
     rospy.spin()
 

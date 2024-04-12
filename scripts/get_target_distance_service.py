@@ -1,23 +1,22 @@
-## @package rt_assignment2
-#
-# \file get_target_distance_service.py
-# \brief  ROS service server for handling distance and average speed calculations based on the robot's target.
-# \author Michal Krepa
-# \version 0.1
-# \date 10/04/2024
-#
-# \details
-#
-# Subscribes to: <BR>
-# - /robot_target
-# - /robot_state
-#
-# Publishes to: <BR>
-# [None]
-#
-# Service: <BR>
-# - get_target_distance
-#
+"""
+ROS service server for handling distance and average speed calculations based on the robot's target.
+
+This module provides a ROS service server for handling distance and average speed calculations based on the robot's target.
+
+Author: Michal Krepa
+Version: 0.1
+Date: 10/04/2024
+
+Subscribes to:
+- `/robot_target`
+- `/robot_state`
+
+Publishes to:
+- [None]
+
+Service:
+- `get_target_distance`
+"""
 
 import rospy
 from math import hypot
@@ -26,35 +25,19 @@ from rt_assignment_2.msg import RobotState
 from rt_assignment_2.msg import RobotTarget
 from rt_assignment_2.srv import TargetDistance, TargetDistanceResponse
 
-##
-# \class DistanceToTargetServer
-# \brief Class defines Rosservice which retrieves the distance in x y z to the target
-#
 class DistanceToTargetServer:
     """
     ROS service server for handling distance and average speed calculations based on the robot's target.
-
-    Attributes:
-    - robot_speed_list: List of robot's speeds for calculating average speed.
-    - av_speed_window_limit: Size of the list for calculating average speed. Set by a parameter in launch/assignment_2.launch
-    - robot_current: Robot's current position as a RobotState message
-    - target_position: Robot's target set by the user as RobotTarget message.
-    - is_target_set: Flag indicating whether the target has been set, for the first time
-    
-    Subscribers:
-    - "/robot_target": Subscribes to the robot's target position updates.
-    - "/robot_state": Subscribes to the robot's current state updates.
-
-    Service:
-    - "get_target_distance": Provides distance and average speed information based on the robot's state and target.
-
-    Methods:
-    - robot_target_callback: Callback for the "/robot_target" subscriber, stores the latest robot's target.
-    - robot_state_callback: Callback for the "/robot_state" subscriber, collects current position and values for average speed.
-    - handle_get_target_distance: Handles the "get_target_distance" service, calculates distance and average speed based on the robot's state and target.
     """
-
     def __init__(self, name: str) -> None:
+        """
+        Constructor for DistanceToTargetServer class.
+
+        Initializes a ROS node, sets up subscribers, and services.
+
+        Parameters:
+            name (str): The name of the ROS node.
+        """
         rospy.init_node(name, anonymous=False)  
         
         self.robot_speed_list = []                                                     
@@ -70,69 +53,61 @@ class DistanceToTargetServer:
                                       
 
     def robot_target_callback(self, data):
-        """Callback to robot_target subscriber, gets the target coordinates"""
-        # store the latest robot's target
+        """
+        Callback function for handling updates to the robot's target position.
+
+        Parameters:
+            data (RobotTarget): The latest robot's target position.
+        """
         self.target_position.x = data.x
         self.target_position.y = data.y
-        # When first target arrives, set to True
         if not self.is_target_set:
-
             self.is_target_set = True
 
     def robot_state_callback(self, data):
-        """Callback to robot_state subscriber, collects current position and values for av_speed"""
+        """
+        Callback function for handling updates to the robot's current state.
+
+        Parameters:
+            data (RobotState): The current state of the robot.
+        """
         self.robot_current.x_pos = data.x_pos
         self.robot_current.y_pos = data.y_pos
-        # fill the values for av_speed window
         if len(self.robot_speed_list) < self.av_speed_window_limit:
             self.robot_speed_list.append((data.x_vel, data.y_vel))
         elif len(self.robot_speed_list) == self.av_speed_window_limit:
-            # First remove the first element
             self.robot_speed_list.pop(0)
-            # Add data at the end of the list
             self.robot_speed_list.append((data.x_vel, data.y_vel))
-        # else:
-        #     # This should never happen
-        #     rospy.logerr("The list size is goes over the limit.")
-        #     rospy.logerr("List size = %d, Threshold is = %d", len(self.robot_speed_list), self.av_speed_window_limit)
 
     def handle_get_target_distance(self, req):
         """
-        Handles the 'get_target_distance' service
+        Handles the 'get_target_distance' service.
+
+        Parameters:
+            req: The service request.
 
         Returns:
-        - GetDistanceToTargetResponse object, the response message containing calculated distance
-        and average speed.
-
-        If the target position is set, calculates the distance in x and y directions, the overall
-        distance as a line, and the average speed in x and y directions based on the robot's speed
-        history. 
-        If the target position is not set, returns zero values for distance, but returns the values
-        for average speed.
+            TargetDistanceResponse: The service response containing calculated distance and average speed.
         """
         response = TargetDistanceResponse()
         if self.is_target_set:
-            # Calculate distance
             response.dist_x = self.target_position.x - self.robot_current.x_pos
             response.dist_y = self.target_position.y - self.robot_current.y_pos
-            rospy.loginfo("target_x = %d target_y %d", self.target_position.x, self.target_position.y)
-            # distance as a line
             response.dist = hypot((self.target_position.x - self.robot_current.x_pos), \
                                   (self.target_position.y - self.robot_current.y_pos))
         else:
-            # There is no target, set distance to zero
             response.dist_x = 0.0
             response.dist_y = 0.0
-        # calculate average speed
         response.av_speed_x = sum( x[0] for x in self.robot_speed_list) / len(self.robot_speed_list)
         response.av_speed_y = sum( y[1] for y in self.robot_speed_list) / len(self.robot_speed_list)
         return response
 
-
 def main():
+    """
+    Main function to start the ROS node and spin the DistanceToTargetServer.
+    """
     last_target_server_node = DistanceToTargetServer('get_target_distance')
     rospy.spin()
-
 
 if __name__ == "__main__":
     try:
