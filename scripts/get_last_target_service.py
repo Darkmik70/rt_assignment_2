@@ -1,4 +1,4 @@
-## @package rt_assignment2
+## @package get_last_target
 #
 # \file get_last_target_service.py
 # \brief ROSservice Server for obtaining the most recent target sent by the user.
@@ -11,11 +11,9 @@
 # Subscribes to: <BR>
 # /robot_target
 #
-# Publishes to: <BR>
-# [None]
 #
 # Service: <BR>
-# get_last_target
+# /get_last_target
 #
 
 
@@ -27,10 +25,12 @@ from rt_assignment_2.msg import RobotTarget
 ##
 # \class LastTargetServer
 # \brief This class defines a service server for obtaining the last target sent by the user
-#
+# 
+# Details:
+#   This is a service server that obtains the most recent target from the robot by accessing /robot_target topic.
 #
 class LastTargetServer:
-    """ROS service server for handling the latest target sent by user to the robot"""
+    ## ROS service server for handling the latest target sent by user to the robot
     def __init__(self, name: str) -> None:
         rospy.init_node(name)
         self.last_target = None
@@ -39,11 +39,11 @@ class LastTargetServer:
         rospy.loginfo("Service ready to provide the last target coordinates.")
     
     def robot_target_callback(self, data):
-        """Calback to latest robots position set by user"""
+        ## Calback to latest robots position set by user
         self.last_target = data
 
     def handle_get_last_target(self, req):
-        """Handles the 'get_last_target' service"""
+        ## Handles the 'get_last_target' service
         response = LastTargetResponse()
         if self.last_target:
             response.x = self.last_target.x

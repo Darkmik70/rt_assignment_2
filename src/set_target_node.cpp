@@ -1,10 +1,24 @@
 /**
-*   \file set_target_node.cpp
-*   \brief Implementation of SetTargetNode class
-*   \author Michal Krepa
-*   \version 1.0
-*   \date 10/04/2024
-**/
+ *   \file set_target_node.cpp
+ *   \brief Implementation of the SetTargetNode class
+ *   \author Michal Krepa
+ *   \version 1.0
+ *   \date 10/04/2022
+ *
+ *   \details
+ *   Subcribes to: <BR>
+ *       /robot_target - topic that publishes current target for robot
+ *       /odom - odometry of the robot
+ *       /robot_cancel_goal - service for cancelling the current goal
+ *
+ *   Publishes to: <BR>
+ *      /robot_state - Current position of the robot
+ *
+ *  Description:
+ *  This node sets new target for the robot through an action client. 
+ *  It additionally can cancel the current goal and share the current state of robots position.      
+ *
+ **/
 #include <rt_assignment_2/set_target_node.hpp>
 #include <rt_assignment_2/RobotState.h>
 #include <rt_assignment_2/RobotTarget.h>

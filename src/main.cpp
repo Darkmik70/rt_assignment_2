@@ -1,13 +1,13 @@
 /**
 *   \file main.cpp
-*   \brief Entry point for the set_target_node.
+*   \brief Wrapper for the set_target_node.
 *   \author Michał Krępa
+*   \version 0.2
 *   \date 10/04/2024
 * 
 *   Wrapper for set_target_node used in the second assignment of Research Track 1.
 *
 **/
-
 #include <rt_assignment_2/set_target_node.hpp>
 
 #include <ros/ros.h>
