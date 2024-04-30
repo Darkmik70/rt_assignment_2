@@ -1,1 +1,0 @@
-# Cancel robot's goal (empty message)
