@@ -93,7 +93,8 @@ namespace rt_assignment_2
         ros::Subscriber sub_target_;    // Subscriber to robot's new target based on msg type RobotTarget.msg
         ros::Subscriber sub_cancel_;    // Subscriber to cancel current robot's goal, msg type RobotCancelGoal.msg
 
-        ros::Publisher pub_state_;      // Publisher to new
+        ros::Publisher pub_state_;              // Publisher to new
+        ros::Publisher pub_goal_is_reached_;    // Publisher to an empty message that informs that goal is reached
 
         // Timer to robot's current position, that logs the current position from Planning feedback
         ros::Timer get_actual_pose_timer_; 

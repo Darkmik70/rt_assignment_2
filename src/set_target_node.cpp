@@ -9,6 +9,7 @@
 
 #include <actionlib/client/simple_action_client.h>
 #include <nav_msgs/Odometry.h>
+#include <std_msgs/Empty.h>
 
 #include <assignment_2_2023/PlanningAction.h>
 
@@ -33,9 +34,10 @@ namespace rt_assignment_2
 
         // Publishers
         pub_state_ = nh_->advertise<rt_assignment_2::RobotState>("/robot_state", 10);
+        pub_goal_is_reached_ = nh_->advertise<std_msgs::Empty>("/goal_is_reached", 10);
 
         // Timers
-        get_actual_pose_timer_ = nh_->createTimer(ros::Duration(0.5), &SetTargetNode::actualPoseCallback, this);    // 2 Hz
+        get_actual_pose_timer_ = nh_->createTimer(ros::Duration(1), &SetTargetNode::actualPoseCallback, this);    // 1 Hz
     }
 
 
@@ -86,6 +88,15 @@ namespace rt_assignment_2
     {
         ROS_INFO("Goal finished in state [%s]", state.toString().c_str());
         ROS_INFO("Select new target by publishing into /robot_target");
+
+        // Check whether the goal is succeded
+        if (state == actionlib::SimpleClientGoalState::SUCCEEDED)
+        {
+            // Publish msg that goal is canceled for jupyter notebook
+            std_msgs::Empty msg;
+            pub_goal_is_reached_.publish(msg);
+        }
+
     }
 
     void SetTargetNode::activeCallback()
